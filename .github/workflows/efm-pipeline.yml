@@ -1,0 +1,38 @@
+name: EFM OIDC Pipeline Verification
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: 
+
+permissions:
+  id-token: write 
+  contents: read  
+
+jobs:
+  verify-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Azure Login (Passwordless OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: "e1a4afdf-36c7-4434-a265-9f5e369e1c5a"
+          tenant-id: "9439dd25-f3b5-4829-a76f-5ede8cd54c3c"
+          subscription-id: "d5ffd8a5-d994-4eb5-b87c-4442054d233e"
+
+      - name: Extract Key Vault Secret (Data Plane Test)
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            echo "Requesting payload from kv-efm-target-lab-01..."
+            
+            SECRET_VAL=$(az keyvault secret show --name "efm-test-secret" --vault-name "kv-efm-target-lab-01" --query "value" -o tsv)
+            
+            echo "::add-mask::$SECRET_VAL"
+            
+            echo "Secret successfully extracted and masked. Zero-Trust circuit complete."
