@@ -20,7 +20,7 @@ jobs:
       - name: Azure Login (Passwordless OIDC)
         uses: azure/login@v2
         with:
-         client-id: "17ffc1ae-758c-4259-902d-d80dd2e4ea83"
+          client-id: "17ffc1ae-758c-4259-902d-d80dd2e4ea83"
           tenant-id: "9439dd25-f3b5-4829-a76f-5ede8cd54c3c"
           subscription-id: "d5ffd8a5-d994-4eb5-b87c-4442054d233e"
 
